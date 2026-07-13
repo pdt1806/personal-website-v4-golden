@@ -1,0 +1,30 @@
+{
+  "name": "vite-min-template",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev --host",
+    "build": "tsc && vite build",
+    "preview": "vite preview --host"
+  },
+  "dependencies": {
+    "@mantine/core": "9.4.0",
+    "@mantine/hooks": "9.4.0",
+    "@mantine/vanilla-extract": "9.4.0",
+    "@vanilla-extract/css": "^1.18.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vanilla-extract/vite-plugin": "^5.1.4",
+    "@vitejs/plugin-react": "^6.0.1",
+    "postcss": "^8.5.8",
+    "postcss-preset-mantine": "1.18.0",
+    "postcss-simple-vars": "^7.0.1",
+    "typescript": "6.0.2",
+    "vite": "^8.0.0"
+  }
+}
