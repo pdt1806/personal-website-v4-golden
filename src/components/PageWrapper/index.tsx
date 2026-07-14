@@ -1,14 +1,14 @@
 import { Box } from "@mantine/core";
-import { ReactNode } from "react";
+import { Outlet } from "react-router-dom";
 
-interface PageWrapperProps {
-  children: ReactNode;
-}
-
-const PageWrapper = ({ children }: PageWrapperProps) => {
+const PageWrapper = () => {
   // const isMobile = useMediaQuery("(max-width: 75em)");
 
-  return <Box h="100vh">{children}</Box>;
+  return (
+    <Box h="100vh">
+      <Outlet />
+    </Box>
+  );
 };
 
 export default PageWrapper;

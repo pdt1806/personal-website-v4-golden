@@ -9,12 +9,15 @@
     "preview": "vite preview --host"
   },
   "dependencies": {
-    "@mantine/core": "9.4.0",
-    "@mantine/hooks": "9.4.0",
-    "@mantine/vanilla-extract": "9.4.0",
+    "@mantine/core": "^9.4.1",
+    "@mantine/hooks": "^9.4.1",
+    "@mantine/notifications": "^9.4.1",
+    "@mantine/vanilla-extract": "^9.4.1",
     "@vanilla-extract/css": "^1.18.0",
     "react": "^19.2.4",
-    "react-dom": "^19.2.4"
+    "react-dom": "^19.2.4",
+    "react-router-dom": "^7.18.1",
+    "use-sound": "^5.0.0"
   },
   "devDependencies": {
     "@types/react": "^19.2.14",

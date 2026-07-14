@@ -3,16 +3,23 @@
   background: radial-gradient(circle, rgba(4, 0, 31, 1) 0%, rgba(56, 0, 211, 1) 100%);
 }
 
-/* .logo {
-  filter: drop-shadow(0 0 30rem black);
-  z-index: 0;
-} */
+.optionStar {
+  position: absolute;
+  z-index: -1;
+  translate: 0 -50px;
+  filter: brightness(0) saturate(100%) invert(71%) sepia(60%) saturate(7500%) hue-rotate(178deg) brightness(99%)
+    contrast(102%);
+  animation: pop-in-out 0.7s ease-in-out infinite;
+}
 
-.option {
-  cursor: pointer;
-  color: #0098fb;
-
-  &:hover {
-    color: white;
+@keyframes pop-in-out {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
   }
 }

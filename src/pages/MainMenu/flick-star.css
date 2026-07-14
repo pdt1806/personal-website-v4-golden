@@ -1,0 +1,77 @@
+.flickTL {
+  animation: tl 100ms ease !important;
+}
+
+.flickTR {
+  animation: tr 100ms ease !important;
+}
+
+.flickCL {
+  animation: cl 100ms ease !important;
+}
+
+.flickCR {
+  animation: cr 100ms ease !important;
+}
+
+.flickBL {
+  animation: bl 100ms ease !important;
+}
+
+.flickBR {
+  animation: br 100ms ease !important;
+}
+
+@keyframes tl {
+  0% {
+    transform: perspective(600px) rotateX(30deg) rotateY(-30deg) translate(-10px, -5px);
+  }
+  100% {
+    transform: none;
+  }
+}
+
+@keyframes tr {
+  0% {
+    transform: perspective(600px) rotateX(30deg) rotateY(30deg) translate(10px, -5px);
+  }
+  100% {
+    transform: none;
+  }
+}
+
+@keyframes cl {
+  0% {
+    transform: perspective(600px) rotateX(-15deg) rotateY(-30deg) translate(-10px);
+  }
+  100% {
+    transform: none;
+  }
+}
+
+@keyframes cr {
+  0% {
+    transform: perspective(600px) rotateX(-15deg) rotateY(30deg) translate(10px);
+  }
+  100% {
+    transform: none;
+  }
+}
+
+@keyframes bl {
+  0% {
+    transform: perspective(600px) rotateX(-45deg) rotateY(-30deg) translate(-10px, 5px);
+  }
+  100% {
+    transform: none;
+  }
+}
+
+@keyframes br {
+  0% {
+    transform: perspective(600px) rotateX(-45deg) rotateY(30deg) translate(10px, 5px);
+  }
+  100% {
+    transform: none;
+  }
+}

@@ -1,0 +1,8 @@
+.option {
+  cursor: pointer;
+  color: var(--mantine-color-p4g-blue-6);
+
+  &:hover {
+    color: white;
+  }
+}

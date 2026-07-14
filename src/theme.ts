@@ -27,8 +27,21 @@ export const theme = createTheme({
       "#3800d3", // main
       "#2b00b1",
     ],
+    "p4g-blue": [
+      "#e1f9ff",
+      "#cbedff",
+      "#9ad8ff",
+      "#64c2ff",
+      "#3aaffe",
+      "#21a4fe",
+      "#0098fb",
+      "#008ae4",
+      "#007acd",
+      "#006ab6",
+    ],
   },
   primaryColor: "p4g-yellow",
+  fontFamily: "Fontsona",
 });
 
 export const vars = themeToVars(theme);
