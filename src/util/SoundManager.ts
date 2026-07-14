@@ -11,7 +11,7 @@ const soundMap: SoundMapType = Object.fromEntries(
 
 export default function GlobalSounds() {
   const soundHooks = Object.fromEntries(
-    Object.entries(sfx).map(([key, src]) => [key, useSound(src, { volume: 1 })[0]]), // volume 0-1
+    Object.entries(sfx).map(([key, src]) => [key, useSound(src, { volume: 0.5 })[0]]), // volume 0-1
   ) as SoundMapType;
 
   Object.keys(soundMap).forEach((key) => {

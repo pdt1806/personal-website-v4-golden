@@ -47,10 +47,6 @@ export const MenuOption = ({ option, align, dir }: { option: MainMenuOptionType;
               withCloseButton: true,
               allowClose: true,
               autoClose: 100000,
-              onClick: () => {
-                // close();
-              },
-              //   title: "You've been compromised",
               message: (
                 <Text c="white" fz={isMobile ? "h4" : "h2"}>
                   This feature will be implemented later.

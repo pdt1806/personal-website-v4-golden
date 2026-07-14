@@ -14,7 +14,7 @@ const starsConfig = [
   { id: "falling_star_9", w: "8vw", left: "96vw", delay: "-5s", duration: "1.9s" },
 ];
 
-const FallingStars = () => {
+const FallingStars = ({ hasStarted }: { hasStarted: boolean }) => {
   return (
     <Box className={classes.fallingStarsWrapper}>
       {starsConfig.map((star) => (
@@ -28,6 +28,10 @@ const FallingStars = () => {
             left: star.left,
             animationDelay: star.delay,
             animationDuration: star.duration,
+            filter: hasStarted
+              ? "brightness(0) saturate(100%) invert(14%) sepia(96%) saturate(4550%) hue-rotate(285deg) brightness(111%) contrast(123%)"
+              : "",
+            opacity: hasStarted ? "60%" : "100%",
           }}
           className={classes.fallingStar}
         />

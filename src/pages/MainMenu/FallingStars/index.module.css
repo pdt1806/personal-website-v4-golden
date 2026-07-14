@@ -4,11 +4,11 @@
 
 .fallingStar {
   z-index: 0;
-  opacity: 60%;
   animation: fall 1.5s linear infinite;
   position: absolute;
-  filter: brightness(0) saturate(100%) invert(14%) sepia(96%) saturate(4550%) hue-rotate(285deg) brightness(111%)
-    contrast(123%);
+  transition:
+    filter 0.3s ease-in-out,
+    opacity 0.3s ease-in-out;
 }
 
 @keyframes fall {
