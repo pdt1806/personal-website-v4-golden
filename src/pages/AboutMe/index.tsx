@@ -1,5 +1,7 @@
-import { Box, Center, Group, Image, Stack, Text, Title } from "@mantine/core";
+import { Box, Center, Flex, Group, Image, Stack, Text, Title } from "@mantine/core";
 import { IconBalloonFilled, IconMapPinFilled, IconProps } from "@tabler/icons-react";
+import { animate, createTimeline } from "animejs";
+import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { playSound } from "../../util/SoundManager";
 import { getHoursUntilNextDate } from "../../util/util";
@@ -35,14 +37,88 @@ const LocationGroup = ({
 const AboutMe = () => {
   const navigate = useNavigate();
 
+  const pageRef = useRef<HTMLDivElement>(null);
+  const imageAboutMeRef = useRef<HTMLImageElement>(null);
+  const stripesRef = useRef<HTMLImageElement>(null);
+  const triangleRef = useRef<HTMLDivElement>(null);
+
+  const whiteAboutMeTextRef = useRef<HTMLDivElement>(null);
+  const yellowAboutMeTextRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (pageRef.current) {
+      animate(pageRef.current, {
+        opacity: [0, 1],
+        x: [20, 0],
+        duration: 500,
+        ease: "outExpo",
+      });
+    }
+
+    if (stripesRef.current) {
+      animate(stripesRef.current, {
+        y: [-2000, 0],
+        duration: 200,
+        ease: "outExpo",
+        delay: 100,
+      });
+    }
+
+    if (imageAboutMeRef.current) {
+      animate(imageAboutMeRef.current, {
+        x: ["100vw", 0],
+        y: ["100vh", 0],
+        duration: 800,
+        ease: "outExpo",
+        delay: 100,
+      });
+    }
+
+    if (triangleRef.current) {
+      animate(triangleRef.current, {
+        x: ["50vw", 0],
+        y: ["-50vh", 0],
+        duration: 800,
+        ease: "outExpo",
+        delay: 200,
+      });
+    }
+
+    // ----------------
+
+    if (whiteAboutMeTextRef.current) {
+      const timeline = createTimeline({ defaults: { duration: 5000, loop: true } });
+      timeline.add(
+        ".white-about-me",
+        {
+          x: ["80vw", "-75vw"],
+          ease: "linear",
+        },
+        "start",
+      );
+    }
+
+    if (yellowAboutMeTextRef.current) {
+      const timeline = createTimeline({ defaults: { duration: 3000, loop: true } });
+      timeline.add(
+        yellowAboutMeTextRef.current,
+        {
+          x: ["80vw", "-600px"],
+          ease: "linear",
+        },
+        "start",
+      );
+    }
+  }, []);
+
   return (
-    <>
+    <Box ref={pageRef} h="100vh" w="100vw" style={{ opacity: 0, overflow: "hidden", zIndex: 2 }} pos="relative">
       {/* bg layer */}
       <Box
         h="100%"
         w="100%"
         //   className={classes.background}
-        style={{ position: "absolute", zIndex: 2, backgroundColor: "#FFFF25" }}
+        style={{ position: "absolute", backgroundColor: "#FFFF25" }}
       />
 
       {/* stripes layer */}
@@ -52,19 +128,28 @@ const AboutMe = () => {
         h="100vh"
         w="auto"
         style={{ position: "absolute", zIndex: 3 }}
+        ref={stripesRef}
       />
 
       <Box h="100%" w="100%" style={{ position: "absolute", zIndex: 4 }}>
-        {/* content layer - right     */}
+        {/* content layer - right */}
         <Box>
-          <Stack gap={0} style={{ transform: "rotate(45deg)", position: "absolute", right: -725, top: -125 }} w="100%">
-            <Stack h={500} w="100%" bg="#F31000" justify="end" align="center">
-              <Title fz={100} c="white">
+          <Stack
+            gap={0}
+            style={{ transform: "rotate(45deg)", position: "absolute", right: -725, top: -125 }}
+            w="100vw"
+            ref={triangleRef}
+          >
+            <Flex h={500} w="100%" bg="#F31000" justify="space-between" align="end" ref={whiteAboutMeTextRef}>
+              <Title fz={100} c="white" w="max-content" className="white-about-me">
                 ABOUT ME
               </Title>
-            </Stack>
+              <Title fz={100} c="white" w="max-content" className="white-about-me">
+                ABOUT ME
+              </Title>
+            </Flex>
             <Box h={135} w="100%" bg="white">
-              <Title fz={100} c="#FFFF24">
+              <Title fz={100} c="#FFFF24" ref={yellowAboutMeTextRef} w="max-content">
                 ABOUT ME
               </Title>
             </Box>
@@ -76,6 +161,7 @@ const AboutMe = () => {
             h="90vh"
             w="auto"
             style={{ position: "absolute", bottom: 0, right: 300, filter: "drop-shadow(40px 30px 0 black)" }}
+            ref={imageAboutMeRef}
           />
         </Box>
 
@@ -157,7 +243,7 @@ const AboutMe = () => {
                 maw={700}
                 p="xs"
               >
-                <Text c="#FF7E00">
+                <Text c="#FF7E00" fz="xl">
                   “I’m passionate about turning my ideas into real projects, whether it's creating games or building
                   tools to solve real-world problems. My skill set spans across both software and hardware, constantly
                   improving as I dive deeper into various technologies.”
@@ -188,7 +274,7 @@ const AboutMe = () => {
           &lt; Back
         </Title>
       </Box>
-    </>
+    </Box>
   );
 };
 

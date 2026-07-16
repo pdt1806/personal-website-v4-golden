@@ -15,12 +15,15 @@
     "@mantine/vanilla-extract": "^9.4.1",
     "@tabler/icons-react": "^3.44.0",
     "@vanilla-extract/css": "^1.18.0",
+    "animejs": "^4.5.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-router-dom": "^7.18.1",
+    "react-transition-group": "^4.4.5",
     "use-sound": "^5.0.0"
   },
   "devDependencies": {
+    "@types/animejs": "^3.1.13",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vanilla-extract/vite-plugin": "^5.1.4",

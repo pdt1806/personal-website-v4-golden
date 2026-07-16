@@ -104,6 +104,13 @@ const MainMenu = () => {
 
         playSound("successful");
         setHasStarted(true);
+
+        if (!document.fullscreenElement) {
+          // request fullscreen on the root <html> element
+          document.documentElement.requestFullscreen().catch((err) => {
+            console.error(`Error attempting to enable fullscreen: ${err.message}`);
+          });
+        }
       } catch (error) {
         console.error("Autoplay prevented or audio error:", error);
       }
@@ -132,7 +139,7 @@ const MainMenu = () => {
   return (
     <Box
       h="100vh"
-      w="100%"
+      w="100vw"
       className={classes.background}
       style={{ backgroundColor: hasStarted ? "var(--mantine-color-p4g-purple-8)" : "#fbe820" }}
     >
