@@ -6,7 +6,7 @@ import { playSound } from "../../../util/SoundManager";
 import { MainMenuOptionType } from "../../../util/type";
 import classes from "./index.module.css";
 
-export const MenuOption = ({ option, align, dir }: { option: MainMenuOptionType; align: string; dir: string }) => {
+const MenuOption = ({ option, align, dir }: { option: MainMenuOptionType; align: string; dir: string }) => {
   const isMobile = useMediaQuery("(max-width: 36em)");
 
   const flickDirectionMap: Record<string, string> = {
@@ -69,3 +69,5 @@ export const MenuOption = ({ option, align, dir }: { option: MainMenuOptionType;
     </Stack>
   );
 };
+
+export default MenuOption;

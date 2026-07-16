@@ -1,7 +1,5 @@
 import useSound from "use-sound";
-import { sfx } from "./audio";
-
-type SoundName = keyof typeof sfx;
+import { sfx, SoundName } from "./audio";
 
 type SoundMapType = Record<SoundName, () => void>;
 

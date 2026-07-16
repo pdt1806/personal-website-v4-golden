@@ -4,3 +4,5 @@ export const sfx: Record<string, string> = {
   open: "/audio/sfx/open.mp3",
   close: "/audio/sfx/close.mp3",
 };
+
+export type SoundName = "hover" | "successful" | "open" | "close";
