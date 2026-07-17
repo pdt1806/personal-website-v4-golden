@@ -34,7 +34,7 @@ const MenuOption = ({ option, align, dir }: { option: MainMenuOptionType; align:
         playSound("hover");
       }}
       onClick={() => {
-        playSound("successful");
+        playSound("open");
         !!option.to
           ? option.external
             ? window.open(`${option.to}`, "_blank")
@@ -46,7 +46,10 @@ const MenuOption = ({ option, align, dir }: { option: MainMenuOptionType; align:
               position: "bottom-left",
               withCloseButton: true,
               allowClose: true,
-              autoClose: 100000,
+              autoClose: 3000,
+              onClose: () => {
+                playSound("click");
+              },
               message: (
                 <Text c="white" fz={isMobile ? "h4" : "h2"}>
                   This feature will be implemented later.

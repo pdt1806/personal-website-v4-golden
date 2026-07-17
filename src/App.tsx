@@ -3,6 +3,7 @@ import "@mantine/core/styles.css";
 import { Notifications } from "@mantine/notifications";
 import "@mantine/notifications/styles.css";
 import { createMemoryRouter, RouteObject, RouterProvider } from "react-router-dom";
+import { GlobalProvider } from "./contexts/global";
 import AboutMe from "./pages/AboutMe";
 import MainMenu from "./pages/MainMenu";
 import { theme } from "./theme";
@@ -37,9 +38,11 @@ const router = createMemoryRouter(routes, {
 export default function App() {
   return (
     <MantineProvider theme={theme}>
-      <GlobalSounds />
-      <Notifications />
-      <RouterProvider router={router} />
+      <GlobalProvider>
+        <GlobalSounds />
+        <Notifications />
+        <RouterProvider router={router} />
+      </GlobalProvider>
     </MantineProvider>
   );
 }

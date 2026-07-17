@@ -1,12 +1,12 @@
 import { Box, Center, Flex, Group, Image, Stack, Text, Title } from "@mantine/core";
-import { IconBalloonFilled, IconMapPinFilled, IconProps } from "@tabler/icons-react";
+import { IconMailFilled, IconMapPinFilled, IconProps } from "@tabler/icons-react";
 import { animate, createTimeline } from "animejs";
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { playSound } from "../../util/SoundManager";
-import { getHoursUntilNextDate } from "../../util/util";
+import { getHoursUntilNextDate, getYearsDifference } from "../../util/util";
 
-const LocationGroup = ({
+const InfoWithIcon = ({
   title,
   description,
   icon: IconElement,
@@ -44,6 +44,9 @@ const AboutMe = () => {
 
   const whiteAboutMeTextRef = useRef<HTMLDivElement>(null);
   const yellowAboutMeTextRef = useRef<HTMLDivElement>(null);
+
+  const contentRef = useRef<HTMLDivElement>(null);
+  const bgRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (pageRef.current) {
@@ -111,6 +114,37 @@ const AboutMe = () => {
     }
   }, []);
 
+  const handleClose = () => {
+    playSound("close");
+
+    if (contentRef.current)
+      animate(contentRef.current, {
+        opacity: [1, 0],
+        x: [0, 20],
+        duration: 200,
+        ease: "outExpo",
+      });
+
+    if (stripesRef.current)
+      animate(stripesRef.current, {
+        x: [0, "100vw"],
+        duration: 500,
+        ease: "outExpo",
+        delay: 100,
+      });
+
+    if (bgRef.current)
+      animate(bgRef.current, {
+        x: [0, "100vw"],
+        duration: 500,
+        ease: "outExpo",
+        delay: 200,
+        onComplete: () => {
+          navigate("/");
+        },
+      });
+  };
+
   return (
     <Box ref={pageRef} h="100vh" w="100vw" style={{ opacity: 0, overflow: "hidden", zIndex: 2 }} pos="relative">
       {/* bg layer */}
@@ -119,6 +153,7 @@ const AboutMe = () => {
         w="100%"
         //   className={classes.background}
         style={{ position: "absolute", backgroundColor: "#FFFF25" }}
+        ref={bgRef}
       />
 
       {/* stripes layer */}
@@ -126,12 +161,12 @@ const AboutMe = () => {
         alt="Stripes"
         src="/assets/pages/about/stripes.svg"
         h="100vh"
-        w="auto"
+        w="max-content"
         style={{ position: "absolute", zIndex: 3 }}
         ref={stripesRef}
       />
 
-      <Box h="100%" w="100%" style={{ position: "absolute", zIndex: 4 }}>
+      <Box h="100%" w="100%" style={{ position: "absolute", zIndex: 4 }} ref={contentRef}>
         {/* content layer - right */}
         <Box>
           <Stack
@@ -194,7 +229,7 @@ const AboutMe = () => {
                 style={{ fontSize: "calc(2.125rem * var(--mantine-scale) * 2.5)", position: "absolute", right: 0 }}
                 c="#FFFF8B"
               >
-                18
+                {getYearsDifference(new Date("2008-06-18"), new Date())}
               </Title>
             </Box>
             <Stack gap="0">
@@ -222,8 +257,8 @@ const AboutMe = () => {
             mt="xl"
             w="max-content"
           >
-            <LocationGroup title="Birthplace" description="Ho Chi Minh City, Vietnam" icon={IconBalloonFilled} />
-            <LocationGroup title="Based in" description="Antelope, CA / Davis, CA" icon={IconMapPinFilled} />
+            <InfoWithIcon title="Email" description="me@bennynguyen.dev" icon={IconMailFilled} />
+            <InfoWithIcon title="Based in" description="Antelope, CA / Davis, CA" icon={IconMapPinFilled} />
             <Box
               bg="#FFAC00"
               style={{ borderRadius: "var(--mantine-radius-md)" }}
@@ -252,27 +287,45 @@ const AboutMe = () => {
             </Box>
           </Stack>
         </Box>
-      </Box>
 
-      <Box
-        style={{
-          position: "absolute",
-          zIndex: 5,
-          bottom: "var(--mantine-spacing-md)",
-          right: "var(--mantine-spacing-md)",
-          backgroundColor: "rgba(0, 0, 0, 0.5)",
-          borderRadius: "var(--mantine-radius-md)",
-          cursor: "pointer",
-        }}
-        p="sm"
-        onClick={() => {
-          playSound("close");
-          navigate("/");
-        }}
-      >
-        <Title c="white" order={2}>
-          &lt; Back
-        </Title>
+        {/* back button */}
+        <Box style={{ cursor: "pointer" }} onClick={handleClose}>
+          <Box
+            style={{
+              position: "absolute",
+              zIndex: 5,
+              bottom: "var(--mantine-spacing-md)",
+              left: "var(--mantine-spacing-md)",
+              backgroundColor: "#feff13",
+              borderRadius: "var(--mantine-radius-md)",
+
+              transform: "rotate(10deg)",
+            }}
+            py="sm"
+            px="xl"
+          >
+            <Title c="white" order={2} style={{ visibility: "hidden" }}>
+              &lt; Back
+            </Title>
+          </Box>
+          <Box
+            style={{
+              position: "absolute",
+              zIndex: 5,
+              bottom: "var(--mantine-spacing-md)",
+              left: "var(--mantine-spacing-md)",
+              backgroundColor: "#212121",
+              borderRadius: "var(--mantine-radius-md)",
+              cursor: "pointer",
+            }}
+            py="sm"
+            px="xl"
+          >
+            <Title c="white" order={2}>
+              &lt; Back
+            </Title>
+          </Box>
+        </Box>
       </Box>
     </Box>
   );

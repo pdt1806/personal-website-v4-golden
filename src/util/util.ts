@@ -10,3 +10,14 @@ export function getHoursUntilNextDate(targetMonth: number, targetDay: number) {
   const diffMs = targetDate.getTime() - now.getTime();
   return Math.floor(diffMs / (1000 * 60 * 60));
 }
+
+export function getYearsDifference(d1: Date, d2: Date) {
+  let years = d2.getFullYear() - d1.getFullYear();
+
+  const monthDiff = d2.getMonth() - d1.getMonth();
+  const dayDiff = d2.getDate() - d1.getDate();
+
+  if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) years--;
+
+  return years;
+}

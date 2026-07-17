@@ -1,12 +1,15 @@
-import { Box, Center, Group, Image, Stack, Title } from "@mantine/core";
+import { ActionIcon, Box, Center, Group, Image, Stack, Title } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
+import { IconDisc, IconDiscOff, IconProps, IconVolume, IconVolumeOff } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
+import { useGlobalContext } from "../../contexts/global";
 import { playSound } from "../../util/SoundManager";
 import FallingStars from "./FallingStars";
 import "./flick-star.css";
 import FloatingStars from "./FloatingStars";
 import classes from "./index.module.css";
+import MainMenuLogo from "./Logo";
 import MenuOption from "./MenuOption";
 
 const options = [
@@ -47,6 +50,30 @@ const audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)
 const gainNode = audioCtx.createGain();
 gainNode.connect(audioCtx.destination);
 
+const SoundButton = ({
+  state,
+  setState,
+  iconEnabled: IconEnabled,
+  iconDisabled: IconDisabled,
+}: {
+  state: boolean;
+  setState: React.Dispatch<React.SetStateAction<boolean>>;
+  iconEnabled: React.ForwardRefExoticComponent<IconProps & React.RefAttributes<SVGSVGElement>>;
+  iconDisabled: React.ForwardRefExoticComponent<IconProps & React.RefAttributes<SVGSVGElement>>;
+}) => {
+  return (
+    <ActionIcon
+      variant="filled"
+      color="#3b3b3b"
+      style={{ border: "2px solid white" }}
+      size="xl"
+      onClick={() => setState(!state)}
+    >
+      {state ? <IconEnabled /> : <IconDisabled />}
+    </ActionIcon>
+  );
+};
+
 const MainMenu = () => {
   const isMobile = useMediaQuery("(max-width: 36em)");
 
@@ -58,6 +85,9 @@ const MainMenu = () => {
   const [hasStarted, setHasStarted] = useState(false);
   const [arrayBuffer, setArrayBuffer] = useState<ArrayBuffer | null>(null);
   const [audioBuffer, setAudioBuffer] = useState<AudioBuffer | null>(null);
+
+  const [bgmEnabled, setBGMEnabled] = useState<boolean>(true);
+  const { sfxEnabled, setSFXEnabled } = useGlobalContext();
 
   const makeArrayBuffer = async () => {
     const fetchedArrayBuffer = await fetch("/audio/bgm/a_corner_of_memory.mp3").then((res) => res.arrayBuffer());
@@ -79,49 +109,41 @@ const MainMenu = () => {
     decodeAudio();
   }, [arrayBuffer]);
 
-  useEffect(() => {
-    const handleInteraction = () => {
-      if (hasStarted) return;
-
-      try {
-        // iOS silent buffer trick to unlock audio context
-        if (audioCtx.state === "suspended") {
-          const silentBuffer = audioCtx.createBuffer(1, 1, 22050);
-          const unlockSource = audioCtx.createBufferSource();
-          unlockSource.buffer = silentBuffer;
-          unlockSource.connect(audioCtx.destination);
-          unlockSource.start(0);
-          audioCtx.resume();
-        }
-
-        const source = audioCtx.createBufferSource();
-        source.buffer = audioBuffer;
-        source.loop = true;
-
-        gainNode.gain.value = 0.5;
-        source.connect(gainNode);
-        source.start(0);
-
-        playSound("successful");
-        setHasStarted(true);
-
-        if (!document.fullscreenElement) {
-          // request fullscreen on the root <html> element
-          document.documentElement.requestFullscreen().catch((err) => {
-            console.error(`Error attempting to enable fullscreen: ${err.message}`);
-          });
-        }
-      } catch (error) {
-        console.error("Autoplay prevented or audio error:", error);
+  const playBGM = () => {
+    try {
+      // iOS silent buffer trick to unlock audio context
+      if (audioCtx.state === "suspended") {
+        const silentBuffer = audioCtx.createBuffer(1, 1, 22050);
+        const unlockSource = audioCtx.createBufferSource();
+        unlockSource.buffer = silentBuffer;
+        unlockSource.connect(audioCtx.destination);
+        unlockSource.start(0);
+        audioCtx.resume();
       }
-    };
 
-    const events = ["click", "keydown", "touchend", "pointerup"];
-    events.forEach((event) => window.addEventListener(event, handleInteraction, { capture: true }));
-    return () => {
-      events.forEach((event) => window.removeEventListener(event, handleInteraction, { capture: true }));
-    };
-  }, [hasStarted, audioBuffer]);
+      const source = audioCtx.createBufferSource();
+      source.buffer = audioBuffer;
+      source.loop = true;
+
+      gainNode.gain.value = bgmEnabled ? 0.5 : 0;
+      source.connect(gainNode);
+      source.start(0);
+    } catch (error) {
+      console.error("Autoplay prevented or audio error:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (!audioBuffer) return;
+    gainNode.gain.value = bgmEnabled ? 0.5 : 0;
+  }, [bgmEnabled]);
+
+  const handleHasStarted = () => {
+    if (hasStarted) return;
+    playBGM();
+    playSound("successful");
+    setHasStarted(true);
+  };
 
   const OptionsMap = [firstColumnOptions, secondColumnOptions].map((column, index) => (
     <Stack gap={optionGap} key={`column-${index}`}>
@@ -148,29 +170,7 @@ const MainMenu = () => {
         <FallingStars hasStarted={hasStarted} />
         <Center w="100%" h="100%" style={{ position: "absolute" }}>
           <Stack align="center" justify="center" gap="xl">
-            <Center>
-              <Box
-                style={{
-                  position: "absolute",
-                  borderRadius: "50%",
-                  zIndex: "0",
-                  filter: `blur(${isMobile ? "20vh" : "20vw"})`,
-                  opacity: !hasStarted ? "0" : "100%",
-                }}
-                w={isMobile ? "60vh" : "60vw"}
-                h={isMobile ? "60vh" : "60vw"}
-                bg="black"
-              />
-              <Image
-                src="/images/logo.svg"
-                alt="Logo"
-                w={"40vw"}
-                className={classes.logo}
-                miw={300}
-                maw={1000}
-                style={{ zIndex: 1 }}
-              />
-            </Center>
+            <MainMenuLogo hasStarted={hasStarted} />
             <Center style={{ zIndex: 1 }}>
               <Image
                 src="/images/four-point-star.svg"
@@ -187,16 +187,51 @@ const MainMenu = () => {
                 >
                   {isMobile ? <Stack gap={optionGap}>{OptionsMap}</Stack> : <Group gap={100}>{OptionsMap}</Group>}
                 </Box>
-                <Title
-                  order={isMobile ? 2 : 1}
-                  style={{ position: "absolute", visibility: hasStarted ? "hidden" : "visible" }}
-                >
-                  {!isMobile ? "PRESS ANY BUTTON" : "PRESS ANYWHERE"}
-                </Title>
+                <Stack style={{ position: "absolute", visibility: hasStarted ? "hidden" : "visible" }} align="center">
+                  <Stack align="end">
+                    <Group gap="xl">
+                      <Title order={2}>Toggle SFX</Title>
+                      <SoundButton
+                        state={sfxEnabled}
+                        setState={setSFXEnabled}
+                        iconEnabled={IconVolume}
+                        iconDisabled={IconVolumeOff}
+                      />
+                    </Group>
+                    <Group gap="xl">
+                      <Title order={2}>Toggle BGM</Title>
+                      <SoundButton
+                        state={bgmEnabled}
+                        setState={setBGMEnabled}
+                        iconEnabled={IconDisc}
+                        iconDisabled={IconDiscOff}
+                      />
+                    </Group>
+                  </Stack>
+                  <Title mt="xl" order={isMobile ? 2 : 1} style={{ cursor: "pointer" }} onClick={handleHasStarted}>
+                    &gt; START
+                  </Title>
+                </Stack>
               </Center>
             </Center>
           </Stack>
         </Center>
+        <Group
+          style={{
+            position: "absolute",
+            visibility: !hasStarted ? "hidden" : "visible",
+            bottom: "var(--mantine-spacing-md)",
+            right: "var(--mantine-spacing-md)",
+          }}
+        >
+          <SoundButton
+            state={sfxEnabled}
+            setState={setSFXEnabled}
+            iconEnabled={IconVolume}
+            iconDisabled={IconVolumeOff}
+          />
+          <SoundButton state={bgmEnabled} setState={setBGMEnabled} iconEnabled={IconDisc} iconDisabled={IconDiscOff} />
+        </Group>
       </>
       <Outlet />
     </Box>

@@ -3,6 +3,7 @@ export const sfx: Record<string, string> = {
   successful: "/audio/sfx/successful.mp3",
   open: "/audio/sfx/open.mp3",
   close: "/audio/sfx/close.mp3",
+  click: "/audio/sfx/click.mp3",
 };
 
-export type SoundName = "hover" | "successful" | "open" | "close";
+export type SoundName = "hover" | "successful" | "open" | "close" | "click";
