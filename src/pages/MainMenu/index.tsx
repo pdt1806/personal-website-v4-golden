@@ -26,7 +26,7 @@ const options = [
   {
     title: "Skills",
     description: "What I have to offer.",
-    to: "",
+    to: "/skills",
   },
   {
     title: "Projects",

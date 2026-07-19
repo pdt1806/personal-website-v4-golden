@@ -6,6 +6,7 @@ import { createMemoryRouter, RouteObject, RouterProvider } from "react-router-do
 import { GlobalProvider } from "./contexts/global";
 import AboutMe from "./pages/AboutMe";
 import MainMenu from "./pages/MainMenu";
+import Skills from "./pages/Skills";
 import { theme } from "./theme";
 import GlobalSounds from "./util/SoundManager";
 
@@ -21,6 +22,10 @@ const routes: RouteObject[] = [
       {
         path: "/about",
         element: <AboutMe />,
+      },
+      {
+        path: "/skills",
+        element: <Skills />,
       },
       {
         path: "*",

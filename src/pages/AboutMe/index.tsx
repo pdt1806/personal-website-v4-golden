@@ -1,38 +1,30 @@
-import { Box, Center, Flex, Group, Image, Stack, Text, Title } from "@mantine/core";
-import { IconMailFilled, IconMapPinFilled, IconProps } from "@tabler/icons-react";
+import { Box, Flex, Group, Image, Stack, Text, Title, Tooltip } from "@mantine/core";
+import { IconAffiliateFilled, IconBrandGithub, IconBrandInstagram, IconBrandLinkedin } from "@tabler/icons-react";
 import { animate, createTimeline } from "animejs";
 import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import BackButton from "../../components/BackButton";
+import InfoWithIcon from "../../components/InfoWithIcon";
 import { playSound } from "../../util/SoundManager";
 import { getHoursUntilNextDate, getYearsDifference } from "../../util/util";
 
-const InfoWithIcon = ({
-  title,
-  description,
-  icon: IconElement,
-}: {
-  title: string;
-  description: string;
-  icon: React.ForwardRefExoticComponent<IconProps & React.RefAttributes<SVGSVGElement>>;
-}) => {
-  return (
-    <Group gap="sm" align="start">
-      <Box w={60} h={50} bg="#E97405" style={{ borderRadius: "var(--mantine-radius-sm)" }}>
-        <Center h="100%" w="100%">
-          <IconElement style={{ width: 36, height: 36 }} color="white" />
-        </Center>
-      </Box>
-      <Stack gap="xs">
-        <Stack h={50} justify="center">
-          <Title order={2} c="#E97405">
-            {title}
-          </Title>
-        </Stack>
-        <Title order={2}>{description}</Title>
-      </Stack>
-    </Group>
-  );
-};
+export const socialLinks = [
+  {
+    icon: IconBrandGithub,
+    name: "GitHub",
+    to: "https://github.com/pdt1806",
+  },
+  {
+    icon: IconBrandLinkedin,
+    name: "LinkedIn",
+    to: "https://linkedin.com/in/benny-nguyen-dev/",
+  },
+  {
+    icon: IconBrandInstagram,
+    name: "Instagram",
+    to: "https://instagram.com/benny_ng08/",
+  },
+];
 
 const AboutMe = () => {
   const navigate = useNavigate();
@@ -94,7 +86,7 @@ const AboutMe = () => {
       timeline.add(
         ".white-about-me",
         {
-          x: ["80vw", "-75vw"],
+          x: ["80vw", "-85vw"],
           ease: "linear",
         },
         "start",
@@ -171,7 +163,7 @@ const AboutMe = () => {
         <Box>
           <Stack
             gap={0}
-            style={{ transform: "rotate(45deg)", position: "absolute", right: -725, top: -125 }}
+            style={{ transform: "rotate(45deg)", position: "absolute", right: "-45vw", top: "3vh" }}
             w="100vw"
             ref={triangleRef}
           >
@@ -254,78 +246,58 @@ const AboutMe = () => {
           </Group>
           <Stack
             style={{ marginLeft: "calc(270px + var(--mantine-spacing-md) - 60px - var(--mantine-spacing-sm))" }}
-            mt="xl"
+            mt="md"
             w="max-content"
           >
-            <InfoWithIcon title="Email" description="me@bennynguyen.dev" icon={IconMailFilled} />
-            <InfoWithIcon title="Based in" description="Antelope, CA / Davis, CA" icon={IconMapPinFilled} />
-            <Box
-              bg="#FFAC00"
-              style={{ borderRadius: "var(--mantine-radius-md)" }}
-              w="max-content"
-              px="sm"
-              pb="sm"
-              mt="xl"
-            >
+            <Box bg="#FFAC00" style={{ borderRadius: "var(--mantine-radius-md)" }} w="max-content" px="sm" pb="sm">
               <Title ff="Radiate Sans Semi Expanded" c="#FFFF8B">
-                <span style={{ fontSize: "calc(2.125rem * var(--mantine-scale) * 1.5)" }}>O</span>BJECTIVE
+                <span style={{ fontSize: "calc(2.125rem * var(--mantine-scale) * 1.5)" }}>H</span>ELLO, THIS IS BENNY
               </Title>
-              <Box
+              <Stack
                 bg="#FFFF8B"
                 style={{ borderRadius: "var(--mantine-radius-md)" }}
                 w="max-content"
                 miw={300}
-                maw={700}
+                maw={800}
                 p="xs"
+                gap={5}
               >
                 <Text c="#FF7E00" fz="xl">
-                  “I’m passionate about turning my ideas into real projects, whether it's creating games or building
+                  I’m passionate about turning my ideas into real projects, whether it's creating games or building
                   tools to solve real-world problems. My skill set spans across both software and hardware, constantly
-                  improving as I dive deeper into various technologies.”
+                  improving as I dive deeper into various technologies.
                 </Text>
-              </Box>
+                <Text c="#FF7E00" fz="xl">
+                  This website is inspired by one of my favorite games, Persona 4 Golden. I consider this to be a hobby
+                  project, but it could work as a showcase of my skills and experience. Besides the Persona series, I
+                  also watch anime and listen to J-pop music in my free time.
+                </Text>
+                <Text c="#FF7E00" fz="xl">
+                  As a young developer, I’m excited to keep growing and creating even more in the future.
+                </Text>
+              </Stack>
             </Box>
+            <InfoWithIcon title="Connect with me" icon={IconAffiliateFilled}>
+              <Group gap="lg">
+                {socialLinks.map((social) => (
+                  <Tooltip label={social.name} position="bottom">
+                    <social.icon
+                      width={36}
+                      height={36}
+                      onClick={() => {
+                        playSound("click");
+                        window.open(social.to, "_blank", "noopener,noreferrer");
+                      }}
+                      style={{ cursor: "pointer" }}
+                    />
+                  </Tooltip>
+                ))}
+              </Group>
+            </InfoWithIcon>
           </Stack>
         </Box>
 
-        {/* back button */}
-        <Box style={{ cursor: "pointer" }} onClick={handleClose}>
-          <Box
-            style={{
-              position: "absolute",
-              zIndex: 5,
-              bottom: "var(--mantine-spacing-md)",
-              left: "var(--mantine-spacing-md)",
-              backgroundColor: "#feff13",
-              borderRadius: "var(--mantine-radius-md)",
-
-              transform: "rotate(10deg)",
-            }}
-            py="sm"
-            px="xl"
-          >
-            <Title c="white" order={2} style={{ visibility: "hidden" }}>
-              &lt; Back
-            </Title>
-          </Box>
-          <Box
-            style={{
-              position: "absolute",
-              zIndex: 5,
-              bottom: "var(--mantine-spacing-md)",
-              left: "var(--mantine-spacing-md)",
-              backgroundColor: "#212121",
-              borderRadius: "var(--mantine-radius-md)",
-              cursor: "pointer",
-            }}
-            py="sm"
-            px="xl"
-          >
-            <Title c="white" order={2}>
-              &lt; Back
-            </Title>
-          </Box>
-        </Box>
+        <BackButton handleClose={handleClose} />
       </Box>
     </Box>
   );
